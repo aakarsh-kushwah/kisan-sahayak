@@ -2,7 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Kisaan Sahayak Dashboard</title>
     
     <style>
@@ -21,6 +24,15 @@
             --color-success: #28a745;
         }
 
+        /* SECURITY: Disable text selection */
+        body {
+            -webkit-user-select: none; /* Safari */
+            -moz-user-select: none; /* Firefox */
+            -ms-user-select: none; /* IE10+ */
+            user-select: none; /* Standard */
+            touch-action: manipulation; /* Prevents default mobile touch actions interfering */
+        }
+        
         /* ==================================== */
         /* TYPOGRAPHY & LAYOUT */
         /* ==================================== */
@@ -99,7 +111,7 @@
 
         .data-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr); 
+            grid-template-columns: repeat(4, 1fr); /* Default 4 columns for desktop */
             gap: 20px;
         }
 
@@ -171,30 +183,15 @@
         .advice-high, .advice-toowet {
             background-color: #fff3cd; 
             border: 1px solid var(--color-warning);
-            color: #856404; /* Dark color for visibility on yellow */
+            color: #856404;
         }
-
-        /* ==================================== */
-        /* FOOTER & STATUS */
-        /* ==================================== */
-        .status-footer {
-            margin-top: 30px;
-            padding: 15px;
-            border-top: 1px solid #ccc;
-            text-align: center;
-            font-size: 0.9em;
-            color: #666;
-        }
-
-        .status-footer .online { color: var(--color-primary); font-weight: bold; }
-        .status-footer .error { color: var(--color-danger); font-weight: bold; }
 
         /* ==================================== */
         /* RESPONSIVENESS */
         /* ==================================== */
         @media (max-width: 1024px) {
             .data-grid {
-                grid-template-columns: repeat(2, 1fr); 
+                grid-template-columns: repeat(2, 1fr); /* 2 columns for tablets */
                 gap: 15px;
             }
         }
@@ -204,7 +201,7 @@
             .language-toggle { top: 5px; right: 5px; }
             .container { padding: 20px; }
             .data-grid {
-                grid-template-columns: 1fr; 
+                grid-template-columns: 1fr; /* Single column for mobile */
                 gap: 15px;
             }
             .data-card .value { font-size: 2em; }
@@ -237,6 +234,20 @@
     </div>
 
     <script>
+        // --- SECURITY LAYER: Disable right-click and F12/Inspect ---
+        document.onkeydown = function(e) {
+            // F12 or Ctrl/Cmd+Shift+I (Browser inspect shortucts)
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) || (e.metaKey && e.altKey && (e.key === 'I' || e.key === 'J'))) {
+                return false;
+            }
+            // Ctrl/Cmd+U (View Source)
+            if (e.ctrlKey && e.key === 'U') {
+                return false;
+            }
+        };
+        document.addEventListener('contextmenu', event => event.preventDefault()); // Disable right-click
+        // --- END SECURITY LAYER ---
+
         // Use an IIFE for scope management and initialization (Professional pattern)
         (function() {
             // --- CONFIGURATION ---
@@ -341,7 +352,6 @@
 
             /**
              * Fetches data for all 8 pins using 8 parallel, individual API calls for stability.
-             * This avoids the persistent 400 Bad Request error encountered with multi-pin GET requests.
              */
             async function fetchAllBlynkData() {
                 DOM.dataContainer.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; color: var(--color-secondary);">${TRANSLATIONS[currentLang].loading}</div>`;
@@ -352,13 +362,12 @@
                     return fetch(apiUrl)
                         .then(response => {
                             if (!response.ok) {
-                                // Throw error to trigger catch, but ensure a response object is returned for Promise.allSettled
                                 throw new Error(`Status ${response.status} for ${sensor.pin}`);
                             }
                             return response.text().then(value => ({ ...sensor, value: value.trim(), error: false }));
                         })
                         .catch(error => {
-                            // On failure (400, 404, or network), return a standard error object
+                            // On failure, return a standard error object
                             return { ...sensor, value: 'N/A', error: true };
                         });
                 });
@@ -369,12 +378,13 @@
                 let errorOccurred = false;
 
                 results.forEach(result => {
-                    const sensorObj = result.value || result.reason; 
+                    const sensorObj = result.value || (result.reason ? { pin: SENSORS.find(s => s.pin).pin } : SENSORS[0]); // Find pin or default
+                    
                     if (result.status === 'fulfilled' && !sensorObj.error) {
                         processedData.push(sensorObj);
                     } else {
                         // Find original sensor template to render error state properly
-                        const originalSensor = SENSORS.find(s => s.pin === sensorObj.pin) || SENSORS[0]; 
+                        const originalSensor = SENSORS.find(s => s.pin === sensorObj.pin) || { pin: 'unknown', name: {en: 'Unknown', hi: 'अज्ञात'}, unit: '' }; 
                         processedData.push({ ...originalSensor, value: 'N/A', error: true });
                         errorOccurred = true;
                     }
@@ -412,7 +422,6 @@
                     
                     // Construct advice box HTML if advice is available
                     if (advice) {
-                        // Map status to CSS classes: advice-low, advice-normal, advice-toodry, etc.
                         const statusClass = advice.status.toLowerCase().replace(/[^a-z]/g, ''); 
                         extraContent = `
                             <div class="advice-box advice-${statusClass}">
