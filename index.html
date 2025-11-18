@@ -2,258 +2,289 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Kisaan Sahayak Dashboard</title>
+    <title>🌿 Kisaan Sahayak Dashboard (Revised)</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     
     <style>
         /* ==================================== */
-        /* BASE & THEME VARIABLES */
+        /* BASE & THEME VARIABLES (Refined) */
         /* ==================================== */
         :root {
-            --color-primary: #28a745; /* Green */
-            --color-secondary: #007bff; /* Blue */
-            --color-background: #f0f4f8; 
+            --color-accent-green: #008744; /* Deep Green for Primary Action/Title */
+            --color-soft-green: #eaf5ee; /* Very light green for card backgrounds */
+            --color-primary: #1565c0; /* Strong Blue for secondary elements */
+            --color-background: #f5f7fa; /* Light Grayish-Blue for background */
             --color-card-bg: #ffffff;
-            --color-text-dark: #333;
+            --color-text-dark: #212121;
             --color-text-light: #fff;
-            --color-danger: #dc3545;
-            --color-warning: #ffc107;
-            --color-success: #28a745;
+            --color-danger: #c62828; /* Strong Red */
+            --color-warning: #ffa000; /* Amber */
+            --color-success: #388e3c; /* Darker Green */
         }
 
-        /* SECURITY: Disable text selection */
-        body {
-            -webkit-user-select: none; /* Safari */
-            -moz-user-select: none; /* Firefox */
-            -ms-user-select: none; /* IE10+ */
-            user-select: none; /* Standard */
-            touch-action: manipulation; /* Prevents default mobile touch actions interfering */
-        }
-        
         /* ==================================== */
         /* TYPOGRAPHY & LAYOUT */
         /* ==================================== */
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Poppins', sans-serif;
             background-color: var(--color-background);
             color: var(--color-text-dark);
             margin: 0;
             padding: 0;
             display: flex;
             flex-direction: column;
-            align-items: center;
             min-height: 100vh;
         }
 
-        .container {
-            width: 95%; 
-            max-width: 1200px; 
-            margin: 30px auto;
-            padding: 30px;
-            background-color: var(--color-card-bg);
-            border-radius: 12px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-        }
-        
-        /* ==================================== */
-        /* HEADER & CONTROLS */
-        /* ==================================== */
         .header {
-            background-color: var(--color-primary);
+            background-color: var(--color-accent-green);
             color: var(--color-text-light);
             width: 100%;
             padding: 25px 0;
             text-align: center;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-            position: relative; 
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
         }
         
-        .header h1 { margin: 0; font-size: 2em; }
-        .header p { margin: 5px 0 0; opacity: 0.9; }
+        .header h1 { 
+            margin: 0; 
+            font-size: 2.2em; 
+            font-weight: 700;
+        }
+        .header p { 
+            margin: 5px 0 0; 
+            font-size: 1em;
+            opacity: 0.9; 
+        }
+
+        .container {
+            width: 95%; 
+            max-width: 1250px; 
+            margin: 30px auto;
+            padding: 0 15px;
+            flex-grow: 1;
+        }
+        
+        /* ==================================== */
+        /* LANGUAGE TOGGLE (New Position/Style) */
+        /* ==================================== */
+        .controls-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--color-primary);
+        }
+
+        .section-title {
+            color: var(--color-accent-green);
+            font-size: 1.8em;
+            font-weight: 600;
+            margin: 0; /* Remove default margin */
+        }
 
         .language-toggle {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            background-color: rgba(255, 255, 255, 0.2);
-            border-radius: 5px;
+            display: flex;
+            background-color: var(--color-card-bg);
+            border-radius: 8px;
             overflow: hidden;
+            border: 1px solid #e0e0e0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
         }
         
         .language-toggle button {
             background: none;
             border: none;
-            color: var(--color-text-light);
-            padding: 8px 12px;
+            color: var(--color-text-dark);
+            padding: 8px 15px;
             cursor: pointer;
             font-size: 0.9em;
-            transition: background-color 0.2s;
+            font-weight: 600;
+            transition: background-color 0.2s, color 0.2s;
+        }
+        
+        /* Separator line between buttons */
+        .language-toggle button:not(:last-child) {
+            border-right: 1px solid #e0e0e0;
         }
 
         .language-toggle button.active {
-            background-color: var(--color-secondary);
-            font-weight: bold;
+            background-color: var(--color-primary); 
+            color: var(--color-text-light);
         }
         
         /* ==================================== */
         /* DATA GRID & CARDS */
         /* ==================================== */
-        h2 {
-            color: var(--color-secondary);
-            border-bottom: 2px solid var(--color-primary);
-            padding-bottom: 15px;
-            margin-bottom: 25px;
-            font-size: 1.6em;
-        }
 
         .data-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr); /* Default 4 columns for desktop */
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+            gap: 25px;
+            margin-bottom: 40px;
         }
 
         .data-card {
-            padding: 20px;
-            background-color: #e8f5e9; 
-            border-radius: 10px;
+            padding: 25px;
+            background-color: var(--color-soft-green); 
+            border-radius: 15px;
             text-align: center;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+            border-left: 5px solid var(--color-accent-green);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 150px;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .data-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
         }
 
         .data-card strong {
             display: block;
-            font-size: 1em;
-            color: var(--color-text-dark);
+            font-size: 1.2em;
+            color: var(--color-primary);
             margin-bottom: 10px;
             font-weight: 600;
         }
 
         .data-card .value {
-            font-size: 2.5em; 
+            font-size: 3em;
             font-weight: 700;
-            color: var(--color-primary); 
+            color: var(--color-text-dark); 
+            line-height: 1;
         }
         
+        .data-card .value small {
+            font-size: 0.5em;
+            font-weight: 400;
+            margin-left: 5px;
+            color: var(--color-accent-green);
+        }
+
         .data-card .error {
-            font-size: 1.2em;
-            font-weight: bold;
+            font-size: 1.5em;
+            font-weight: 700;
             color: var(--color-danger); 
+            margin-top: 10px;
         }
 
         /* Advice Box Styling */
         .advice-box {
-            margin-top: 15px;
-            padding: 10px;
-            border-radius: 8px;
+            margin-top: 20px;
+            padding: 12px;
+            border-radius: 10px;
             font-size: 0.9em;
-            font-weight: 500;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            text-align: left; 
+            font-weight: 600;
+            text-align: left;
+            border-left: 5px solid;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
         }
 
         .advice-status {
-            font-weight: bold;
+            font-weight: 700;
             font-size: 1.1em;
             margin-bottom: 5px;
+            text-align: center;
+        }
+        
+        .advice-message {
+            font-weight: 400;
             text-align: center;
         }
 
         /* Status Coloring */
         .advice-low, .advice-toodry {
-            background-color: #ffebee; 
-            border: 1px solid var(--color-danger);
+            background-color: #fce4e4; 
+            border-color: var(--color-danger);
             color: var(--color-danger);
         }
 
         .advice-normal, .advice-medium { 
             background-color: #e8f5e9; 
-            border: 1px solid var(--color-success);
+            border-color: var(--color-success);
             color: var(--color-success);
         }
 
         .advice-high, .advice-toowet {
-            background-color: #fff3cd; 
-            border: 1px solid var(--color-warning);
-            color: #856404;
+            background-color: #fff8e1; 
+            border-color: var(--color-warning);
+            color: #795548;
+        }
+        
+        /* ==================================== */
+        /* FOOTER & STATUS */
+        /* ==================================== */
+        .status-footer {
+            margin-top: 30px;
+            padding: 15px;
+            background-color: var(--color-card-bg);
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            font-size: 0.95em;
+            color: #616161;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+            width: 100%;
         }
 
-        /* ==================================== */
-        /* RESPONSIVENESS */
-        /* ==================================== */
-        @media (max-width: 1024px) {
-            .data-grid {
-                grid-template-columns: repeat(2, 1fr); /* 2 columns for tablets */
-                gap: 15px;
-            }
-        }
-
+        .status-footer .online { color: var(--color-success); font-weight: 600; }
+        .status-footer .error { color: var(--color-danger); font-weight: 600; }
+        
+        /* Media Query for smaller screens */
         @media (max-width: 600px) {
-            .header h1 { font-size: 1.5em; }
-            .language-toggle { top: 5px; right: 5px; }
-            .container { padding: 20px; }
-            .data-grid {
-                grid-template-columns: 1fr; /* Single column for mobile */
-                gap: 15px;
+            .header h1 { font-size: 1.8em; }
+            .controls-row {
+                flex-direction: column;
+                align-items: flex-start;
             }
-            .data-card .value { font-size: 2em; }
+            .section-title { margin-bottom: 10px; }
+            .language-toggle { margin-top: 10px; }
+            .data-card .value { font-size: 2.5em; }
+            .section-title { font-size: 1.5em; }
         }
     </style>
 </head>
 <body>
 
     <header class="header">
-        <div class="language-toggle">
-            <button id="lang-hi" data-lang="hi">हिंदी</button>
-            <button id="lang-en" data-lang="en" class="active">EN</button>
-        </div>
         <h1 id="header-title">🌱 Kisaan Sahayak</h1>
         <p id="header-subtitle">Live Soil and Weather Sensor Data</p>
     </header>
 
     <div class="container">
-        <h2 id="section-title">Live Sensor Readings (V0 to V7)</h2>
+        <div class="controls-row">
+            <h2 id="section-title" class="section-title">Field Monitoring</h2>
+            <div class="language-toggle">
+                <button id="lang-hi" data-lang="hi">हिंदी</button>
+                <button id="lang-en" data-lang="en" class="active">EN</button>
+            </div>
+        </div>
         
         <div id="device-data" class="data-grid">
-            <div style="grid-column: 1 / -1; text-align: center; padding: 50px;">
-                Loading all sensor data...
+            <div style="grid-column: 1 / -1; text-align: center; padding: 50px; font-size: 1.2em; color: var(--color-primary);">
+                Loading live sensor data...
             </div>
         </div>
 
-        <div id="status-message" class="status-footer">
-            </div>
+    </div>
 
+    <div id="status-message" class="status-footer">
     </div>
 
     <script>
-        // --- SECURITY LAYER: Disable right-click and F12/Inspect ---
-        document.onkeydown = function(e) {
-            // F12 or Ctrl/Cmd+Shift+I (Browser inspect shortucts)
-            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) || (e.metaKey && e.altKey && (e.key === 'I' || e.key === 'J'))) {
-                return false;
-            }
-            // Ctrl/Cmd+U (View Source)
-            if (e.ctrlKey && e.key === 'U') {
-                return false;
-            }
-        };
-        document.addEventListener('contextmenu', event => event.preventDefault()); // Disable right-click
-        // --- END SECURITY LAYER ---
-
         // Use an IIFE for scope management and initialization (Professional pattern)
         (function() {
             // --- CONFIGURATION ---
             const AUTH_TOKEN = 'Wce1eoW8IhucQdcgPWVTVu5qhIWlXv-w'; 
             const BLYNK_SERVER = 'https://blynk.cloud'; 
-            
+            const REFRESH_INTERVAL = 30000; // 30 seconds refresh for live data
+
             // --- STATE & CACHE ---
             let currentLang = 'en'; 
             let fetchedSensorData = []; 
@@ -269,32 +300,42 @@
                 langEn: document.getElementById('lang-en'),
             };
 
-            // --- DATA STRUCTURES ---
+            // --- DATA STRUCTURES (User-facing names used) ---
             const SENSORS = [
-                { pin: 'v0', name: { en: 'Temperature', hi: 'तापमान' }, unit: '°C' }, 
-                { pin: 'v1', name: { en: 'Humidity', hi: 'आर्द्रता' }, unit: '%' },
-                { pin: 'v2', name: { en: 'Soil Moisture', hi: 'मृदा नमी' }, unit: '%' },
-                { pin: 'v3', name: { en: 'Nitrogen', hi: 'नाइट्रोजन' }, unit: 'mg' },
-                { pin: 'v4', name: { en: 'Potassium', hi: 'पोटैशियम' }, unit: 'mg' },
-                { pin: 'v5', name: { en: 'Phosphorous', hi: 'फॉस्फोरस' }, unit: 'mg' },
-                { pin: 'v6', name: { en: 'pH Level', hi: 'pH स्तर' }, unit: '' }, 
-                { pin: 'v7', name: { en: 'EC (uA)', hi: 'EC (चालकता)' }, unit: 'μA' }, 
-            ];
+                { pin: 'v0', name: { en: 'Air Temperature', hi: 'हवा का तापमान' }, unit: '°C' }, 
+                { pin: 'v1', name: { en: 'Air Humidity', hi: 'हवा की आर्द्रता' }, unit: '%' },
+                { pin: 'v2', name: 'Soil Moisture', unit: '%', isCritical: true },
+                { pin: 'v3', name: 'Nitrogen (N)', unit: 'mg', isCritical: true },
+                { pin: 'v4', name: 'Potassium (K)', unit: 'mg', isCritical: true },
+                { pin: 'v5', name: 'Phosphorous (P)', unit: 'mg', isCritical: true },
+                { pin: 'v6', name: 'Soil pH Level', unit: '' }, 
+                { pin: 'v7', name: 'Soil EC', unit: 'μA' },
+            ].map(sensor => {
+                if (typeof sensor.name === 'string') {
+                    if (sensor.name.includes('Moisture')) sensor.name = { en: 'Soil Moisture', hi: 'मृदा नमी' };
+                    else if (sensor.name.includes('Nitrogen')) sensor.name = { en: 'Nitrogen (N)', hi: 'नाइट्रोजन (N)' };
+                    else if (sensor.name.includes('Potassium')) sensor.name = { en: 'Potassium (K)', hi: 'पोटैशियम (K)' };
+                    else if (sensor.name.includes('Phosphorous')) sensor.name = { en: 'Phosphorous (P)', hi: 'फॉस्फोरस (P)' };
+                    else if (sensor.name.includes('pH')) sensor.name = { en: 'Soil pH Level', hi: 'मृदा pH स्तर' };
+                    else if (sensor.name.includes('EC')) sensor.name = { en: 'Soil EC', hi: 'मृदा EC (चालकता)' };
+                }
+                return sensor;
+            });
             
             const TRANSLATIONS = {
                 en: {
-                    title: '🌱 Kisaan Sahayak', subtitle: 'Live Soil and Weather Sensor Data', section: 'Live Sensor Readings (V0 to V7)',
-                    loading: 'Fetching data for all 8 pins...', success: 'All {count} data streams loaded successfully.',
-                    error: 'Loaded {count}/{total} streams. Data for some pins may be missing.', lastUpdated: 'Last Updated:',
+                    title: '🌱 Kisaan Sahayak', subtitle: 'Live Soil and Weather Sensor Data', section: 'Field Monitoring',
+                    loading: 'Fetching data for all sensors...', success: 'All {count} data streams loaded successfully.',
+                    error: 'Loaded {count}/{total} streams. Data for some sensors may be unavailable.', lastUpdated: 'Last Updated:',
                 },
                 hi: {
-                    title: '🌱 किसान सहायक', subtitle: 'लाइव मृदा और मौसम सेंसर डेटा', section: 'लाइव सेंसर रीडिंग (V0 से V7)',
-                    loading: 'सभी 8 पिनों के लिए डेटा प्राप्त हो रहा है...', success: 'सभी {count} डेटा स्ट्रीम सफलतापूर्वक लोड हो गए।',
-                    error: '{count}/{total} स्ट्रीम लोड हुए। कुछ पिनों का डेटा अनुपलब्ध हो सकता है।', lastUpdated: 'अंतिम अपडेट:',
+                    title: '🌱 किसान सहायक', subtitle: 'लाइव मृदा और मौसम सेंसर डेटा', section: 'खेत की निगरानी',
+                    loading: 'सभी सेंसरों के लिए डेटा प्राप्त हो रहा है...', success: 'सभी {count} डेटा स्ट्रीम सफलतापूर्वक लोड हो गए।',
+                    error: '{count}/{total} स्ट्रीम लोड हुए। कुछ सेंसरों का डेटा अनुपलब्ध हो सकता है।', lastUpdated: 'अंतिम अपडेट:',
                 }
             };
 
-            // --- ADVICE LOGIC ---
+            // --- ADVICE LOGIC (Kept for functionality) ---
             
             const getPotassiumAdvice = (value, lang) => {
                 const num = parseFloat(value);
@@ -325,8 +366,8 @@
             const getNitrogenAdvice = (value, lang) => {
                 const num = parseFloat(value);
                 const advice = {
-                    en: { low: { status: "Low", message: "Low Nitrogen! Add fertilizer." }, normal: { status: "Medium", message: "Nitrogen levels are medium." }, high: { status: "High", message: "High Nitrogen! Reduce fertilization." } },
-                    hi: { low: { status: "कम", message: "नाइट्रोजन कम है! उर्वरक डालें।" }, normal: { status: "मध्यम", message: "नाइट्रोजन का स्तर मध्यम है।" }, high: { status: "उच्च", message: "उच्च नाइट्रोजन! उर्वरक देना बंद करें।" } }
+                    en: { low: { status: "Low", message: "Low Nitrogen! Add urea/ammonia sulfate fertilizer." }, normal: { status: "Medium", message: "Nitrogen levels are medium." }, high: { status: "High", message: "High Nitrogen! Reduce fertilization." } },
+                    hi: { low: { status: "कम", message: "नाइट्रोजन कम है! यूरिया/अमोनिया सल्फेट डालें।" }, normal: { status: "मध्यम", message: "नाइट्रोजन का स्तर मध्यम है।" }, high: { status: "उच्च", message: "उच्च नाइट्रोजन! उर्वरक देना बंद करें।" } }
                 };
                 if (isNaN(num) || value === 'N/A') return null;
                 if (num >= 0 && num <= 50) return advice[lang].low;
@@ -338,8 +379,8 @@
             const getMoistureAdvice = (value, lang) => {
                 const num = parseFloat(value);
                 const advice = {
-                    en: { dry: { status: "Too Dry", message: "Soil is too dry! Irrigation required immediately." }, normal: { status: "Normal", message: "Soil moisture is normal." }, wet: { status: "Too Wet", message: "Soil is over-watered! Reduce irrigation." } },
-                    hi: { dry: { status: "बहुत सूखा", message: "मिट्टी बहुत सूखी है! तुरंत सिंचाई आवश्यक है।" }, normal: { status: "सामान्य", message: "मृदा नमी सामान्य है।" }, wet: { status: "बहुत गीला", message: "मिट्टी में ज़्यादा पानी है! सिंचाई कम करें।" } }
+                    en: { dry: { status: "Too Dry", message: "Soil is too dry! Irrigation required immediately." }, normal: { status: "Normal", message: "Soil moisture is normal. Maintain schedule." }, wet: { status: "Too Wet", message: "Soil is over-watered! Stop irrigation to prevent root rot." } },
+                    hi: { dry: { status: "बहुत सूखा", message: "मिट्टी बहुत सूखी है! तुरंत सिंचाई आवश्यक है।" }, normal: { status: "सामान्य", message: "मृदा नमी सामान्य है। शेड्यूल बनाए रखें।" }, wet: { status: "बहुत गीला", message: "मिट्टी में ज़्यादा पानी है! जड़ सड़न से बचने के लिए सिंचाई बंद करें।" } }
                 };
                 if (isNaN(num) || value === 'N/A') return null;
                 if (num >= 0 && num <= 30) return advice[lang].dry;
@@ -347,14 +388,16 @@
                 if (num > 60) return advice[lang].wet; 
                 return null;
             };
-
+            
             // --- API AND DATA FETCHING ---
 
             /**
              * Fetches data for all 8 pins using 8 parallel, individual API calls for stability.
              */
             async function fetchAllBlynkData() {
-                DOM.dataContainer.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; color: var(--color-secondary);">${TRANSLATIONS[currentLang].loading}</div>`;
+                DOM.dataContainer.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 50px; font-size: 1.2em; color: var(--color-primary);">
+                    ${TRANSLATIONS[currentLang].loading}
+                </div>`;
                 
                 const fetchPromises = SENSORS.map(sensor => {
                     const apiUrl = `${BLYNK_SERVER}/external/api/get?token=${AUTH_TOKEN}&${sensor.pin}`;
@@ -367,27 +410,21 @@
                             return response.text().then(value => ({ ...sensor, value: value.trim(), error: false }));
                         })
                         .catch(error => {
-                            // On failure, return a standard error object
                             return { ...sensor, value: 'N/A', error: true };
                         });
                 });
 
-                const results = await Promise.allSettled(fetchPromises);
+                // Use Promise.all to wait for all promises, regardless of success/fail
+                const results = await Promise.all(fetchPromises);
                 
                 let processedData = [];
                 let errorOccurred = false;
 
-                results.forEach(result => {
-                    const sensorObj = result.value || (result.reason ? { pin: SENSORS.find(s => s.pin).pin } : SENSORS[0]); // Find pin or default
-                    
-                    if (result.status === 'fulfilled' && !sensorObj.error) {
-                        processedData.push(sensorObj);
-                    } else {
-                        // Find original sensor template to render error state properly
-                        const originalSensor = SENSORS.find(s => s.pin === sensorObj.pin) || { pin: 'unknown', name: {en: 'Unknown', hi: 'अज्ञात'}, unit: '' }; 
-                        processedData.push({ ...originalSensor, value: 'N/A', error: true });
+                results.forEach(sensorData => {
+                    if (sensorData.error) {
                         errorOccurred = true;
                     }
+                    processedData.push(sensorData);
                 });
                 
                 // Update global state and UI
@@ -404,13 +441,13 @@
             function renderData(data) {
                 let htmlContent = '';
                 
-                // Sort by pin number (V0, V1, V2, ...)
+                // Sort by pin number (V0, V1, V2, ...) for consistent layout
                 const sortedData = [...data].sort((a, b) => parseInt(a.pin.substring(1)) - parseInt(b.pin.substring(1)));
 
                 sortedData.forEach(sensor => {
                     const displayValue = sensor.value === 'N/A' ? '---' : sensor.value;
                     const valueClass = sensor.error ? 'error' : 'value';
-                    const sensorName = sensor.name[currentLang];
+                    const sensorName = sensor.name[currentLang] || sensor.name.en;
                     let extraContent = '';
                     let advice = null;
 
@@ -422,19 +459,29 @@
                     
                     // Construct advice box HTML if advice is available
                     if (advice) {
+                        // Map status to CSS classes: advice-low, advice-normal, advice-toodry, etc.
                         const statusClass = advice.status.toLowerCase().replace(/[^a-z]/g, ''); 
                         extraContent = `
                             <div class="advice-box advice-${statusClass}">
-                                <div class="advice-status">${advice.status} (${sensor.pin.toUpperCase()})</div>
+                                <div class="advice-status">${advice.status}</div>
                                 <div class="advice-message">${advice.message}</div>
                             </div>
                         `;
                     }
+                    
+                    // For the main value display: format as a whole number if it looks like one, otherwise two decimal places
+                    let formattedValue = displayValue;
+                    if (!isNaN(parseFloat(displayValue))) {
+                        formattedValue = (parseFloat(displayValue) % 1 === 0) ? displayValue : parseFloat(displayValue).toFixed(2);
+                    }
+
 
                     htmlContent += `
                         <div class="data-card">
-                            <strong>${sensorName}</strong>
-                            <span class="${valueClass}">${displayValue} ${sensor.unit}</span>
+                            <div>
+                                <strong>${sensorName}</strong>
+                                <span class="${valueClass}">${formattedValue} ${sensor.error ? '' : `<small>${sensor.unit}</small>`}</span>
+                            </div>
                             ${extraContent}
                         </div>
                     `;
@@ -454,10 +501,11 @@
                 let message;
                 if (hasError) {
                     message = lang.error.replace('{count}', successfulCount).replace('{total}', totalSensors);
-                    DOM.statusMessage.innerHTML = `<span class="error">⚠️ ${message}</span> ${lang.lastUpdated} ${new Date().toLocaleTimeString()}`;
+                    // Use correct locale for time format
+                    DOM.statusMessage.innerHTML = `<span class="error">⚠️ ${message}</span> | ${lang.lastUpdated} ${new Date().toLocaleTimeString(currentLang === 'hi' ? 'hi-IN' : 'en-US')}`;
                 } else {
                     message = lang.success.replace('{count}', totalSensors);
-                    DOM.statusMessage.innerHTML = `<span class="online">✅ ${message}</span> ${lang.lastUpdated} ${new Date().toLocaleTimeString()}`;
+                    DOM.statusMessage.innerHTML = `<span class="online">✅ ${message}</span> | ${lang.lastUpdated} ${new Date().toLocaleTimeString(currentLang === 'hi' ? 'hi-IN' : 'en-US')}`;
                 }
             }
 
@@ -482,6 +530,11 @@
                     renderData(fetchedSensorData);
                     const hasError = fetchedSensorData.some(s => s.error);
                     updateStatusMessage(fetchedSensorData, hasError);
+                } else {
+                    // If initial data is still loading, show the loading message in the new language
+                    DOM.dataContainer.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 50px; font-size: 1.2em; color: var(--color-primary);">
+                        ${TRANSLATIONS[currentLang].loading}
+                    </div>`;
                 }
             }
 
@@ -492,6 +545,10 @@
 
             // Initial data load on page ready
             fetchAllBlynkData();
+            
+            // Set up automatic refresh
+            setInterval(fetchAllBlynkData, REFRESH_INTERVAL); 
+
         })();
     </script>
 
