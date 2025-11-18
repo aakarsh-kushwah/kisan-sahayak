@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>किसान सहायक - Kisaan Sahayak Dashboard (Final)</title>
+    
+    <style>
+        /* A. Global Styles & Reset */
+        :root {
+            --primary-color: #28a745; /* Green */
+            --secondary-color: #007bff; /* Blue */
+            --background-color: #f0f4f8; 
+            --card-bg: #ffffff;
+            --text-dark: #333;
+            --text-light: #fff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* B. Header & Language Toggle */
+        .header {
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            width: 100%;
+            padding: 25px 0;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            position: relative; 
+        }
+        
+        .header h1 { margin: 0; font-size: 2em; }
+        .header p { margin: 5px 0 0; opacity: 0.9; }
+
+        .language-toggle {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .language-toggle button {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background-color 0.2s;
+        }
+
+        .language-toggle button.active {
+            background-color: var(--secondary-color);
+            font-weight: bold;
+        }
+
+        /* C. Container & Data Grid */
+        .container {
+            width: 95%; 
+            max-width: 1200px; 
+            margin: 30px auto;
+            padding: 30px;
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: var(--secondary-color);
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+            font-size: 1.6em;
+        }
+
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); 
+            gap: 20px;
+        }
+
+        /* D. Data Card Styling */
+        .data-card {
+            padding: 20px;
+            background-color: #e8f5e9; 
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .data-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .data-card strong {
+            display: block;
+            font-size: 1em;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .data-card .value {
+            font-size: 2.5em; 
+            font-weight: 700;
+            color: var(--primary-color); 
+        }
+        
+        .data-card .error {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #dc3545; 
+        }
+
+        /* E. Advice Box Styling (Unified) */
+        .advice-box {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            font-weight: 500;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: left; 
+        }
+
+        .advice-status {
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 5px;
+            text-align: center;
+        }
+
+        /* Low/Dry/Deficient Status - Red/Danger */
+        .advice-low, .advice-toodry {
+            background-color: #ffebee; 
+            border: 1px solid #dc3545;
+            color: #dc3545;
+        }
+
+        /* Medium/Normal Status - Green/Success */
+        .advice-normal { 
+            background-color: #e8f5e9; 
+            border: 1px solid #28a745;
+            color: #28a745;
+        }
+
+        /* High/Wet Status - Yellow/Warning */
+        .advice-high, .advice-toowet {
+            background-color: #fff3cd; 
+            border: 1px solid #ffc107;
+            color: #856404;
+        }
+
+        /* F. Status Footer & Responsive Design */
+        .status-footer {
+            margin-top: 30px;
+            padding: 15px;
+            border-top: 1px solid #ccc;
+            text-align: center;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .status-footer .online { color: var(--primary-color); font-weight: bold; }
+        .status-footer .error { color: #dc3545; font-weight: bold; }
+
+        @media (max-width: 1024px) {
+            .data-grid {
+                grid-template-columns: repeat(2, 1fr); 
+                gap: 15px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .header h1 { font-size: 1.5em; }
+            .language-toggle { top: 5px; right: 5px; }
+            .container { padding: 20px; }
+            .data-grid {
+                grid-template-columns: 1fr; 
+                gap: 15px;
+            }
+            .data-card .value { font-size: 2em; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="language-toggle">
+            <button id="lang-hi" data-lang="hi">हिंदी</button>
+            <button id="lang-en" data-lang="en" class="active">EN</button>
+        </div>
+        <h1 id="header-title">🌱 Kisaan Sahayak</h1>
+        <p id="header-subtitle">Live Soil and Weather Sensor Data</p>
+    </header>
+
+    <div class="container">
+        <h2 id="section-title">Live Sensor Readings (V0 to V7)</h2>
+        
+        <div id="device-data" class="data-grid">
+            <div style="grid-column: 1 / -1; text-align: center; padding: 50px;">
+                Loading all sensor data...
+            </div>
+        </div>
+
+        <div id="status-message" class="status-footer">
+            </div>
+
+    </div>
+
+    <script>
+        // 🚨 CONFIGURATION 🚨
+        const AUTH_TOKEN = 'Wce1eoW8IhucQdcgPWVTVu5qhIWlXv-w'; 
+        const BLYNK_SERVER = 'https://blynk.cloud'; 
+        
+        const dataContainer = document.getElementById('device-data');
+        const statusMessage = document.getElementById('status-message');
+        
+        let currentLang = 'en'; // Default language
+        let fetchedSensorData = []; // Global storage for fetched data
+
+        // 8 डेटा स्ट्रीम के लिए अंतिम सेंसर कॉन्फ़िगरेशन
+        const allSensors = [
+            { pin: 'v0', name: { en: 'Temperature', hi: 'तापमान' }, unit: '°C' }, 
+            { pin: 'v1', name: { en: 'Humidity', hi: 'आर्द्रता' }, unit: '%' },
+            { pin: 'v2', name: { en: 'Soil Moisture', hi: 'मृदा नमी' }, unit: '%' },
+            { pin: 'v3', name: { en: 'Nitrogen', hi: 'नाइट्रोजन' }, unit: 'mg' },
+            { pin: 'v4', name: { en: 'Potassium', hi: 'पोटैशियम' }, unit: 'mg' },
+            { pin: 'v5', name: { en: 'Phosphorous', hi: 'फॉस्फोरस' }, unit: 'mg' },
+            { pin: 'v6', name: { en: 'pH Level', hi: 'pH स्तर' }, unit: '' }, 
+            { pin: 'v7', name: { en: 'EC (uA)', hi: 'EC (चालकता)' }, unit: 'μA' }, 
+        ];
+        
+        // UI टेक्स्ट के लिए ट्रांसलेशन डिक्शनरी
+        const translations = {
+            en: {
+                title: '🌱 Kisaan Sahayak',
+                subtitle: 'Live Soil and Weather Sensor Data',
+                section: 'Live Sensor Readings (V0 to V7)',
+                loading: 'Fetching data for all 8 pins...',
+                success: 'All {count} data streams loaded successfully.',
+                error: 'Loaded {count}/{total} streams. Data for some pins may be missing.',
+                lastUpdated: 'Last Updated:',
+                statusError: 'Error: Cannot connect to Blynk API.'
+            },
+            hi: {
+                title: '🌱 किसान सहायक',
+                subtitle: 'लाइव मृदा और मौसम सेंसर डेटा',
+                section: 'लाइव सेंसर रीडिंग (V0 से V7)',
+                loading: 'सभी 8 पिनों के लिए डेटा प्राप्त हो रहा है...',
+                success: 'सभी {count} डेटा स्ट्रीम सफलतापूर्वक लोड हो गए।',
+                error: '{count}/{total} स्ट्रीम लोड हुए। कुछ पिनों का डेटा अनुपलब्ध हो सकता है।',
+                lastUpdated: 'अंतिम अपडेट:',
+                statusError: 'त्रुटि: Blynk API से कनेक्ट नहीं किया जा सकता।'
+            }
+        };
+
+        // --- 1. Advice Logic Functions (N, P, K, Moisture) ---
+
+        const getPotassiumAdvice = (value, lang) => {
+            const numericValue = parseFloat(value);
+            const advice = {
+                en: { low: { status: "Low", message: "Low Potassium! Add MOP/Organic Potash." }, normal: { status: "Normal", message: "Potassium level is normal." }, high: { status: "High", message: "High Potassium detected! Avoid adding potash fertilizer." } },
+                hi: { low: { status: "कम", message: "पोटैशियम कम है! MOP/जैविक पोटाश डालें।" }, normal: { status: "सामान्य", message: "पोटैशियम स्तर सामान्य है।" }, high: { status: "उच्च", message: "उच्च पोटैशियम पाया गया! पोटाश उर्वरक डालने से बचें।" } }
+            };
+            if (isNaN(numericValue) || value === 'N/A') return null;
+            if (numericValue >= 0 && numericValue <= 150) return advice[lang].low;
+            if (numericValue >= 151 && numericValue <= 300) return advice[lang].normal;
+            if (numericValue > 300) return advice[lang].high;
+            return null;
+        };
+        
+        const getPhosphorusAdvice = (value, lang) => {
+            const numericValue = parseFloat(value);
+            const advice = {
+                en: { low: { status: "Low", message: "Low Phosphorus! Add DAP/Phosphate fertilizer." }, normal: { status: "Normal", message: "Phosphorus level is normal." }, high: { status: "High", message: "High Phosphorus! Reduce fertilizer usage." } },
+                hi: { low: { status: "कम", message: "फॉस्फोरस कम है! DAP/फॉस्फेट उर्वरक डालें।" }, normal: { status: "सामान्य", message: "फॉस्फोरस स्तर सामान्य है।" }, high: { status: "उच्च", message: "उच्च फॉस्फोरस! उर्वरक का उपयोग कम करें।" } }
+            };
+            if (isNaN(numericValue) || value === 'N/A') return null;
+            if (numericValue >= 0 && numericValue <= 20) return advice[lang].low; // 0-20
+            if (numericValue >= 21 && numericValue <= 60) return advice[lang].normal; // 21-60
+            if (numericValue > 60) return advice[lang].high; // >60
+            return null;
+        };
+
+        const getNitrogenAdvice = (value, lang) => {
+            const numericValue = parseFloat(value);
+            const advice = {
+                en: { low: { status: "Low", message: "Low Nitrogen! Add fertilizer." }, normal: { status: "Medium", message: "Nitrogen levels are medium." }, high: { status: "High", message: "High Nitrogen! Reduce fertilization." } },
+                hi: { low: { status: "कम", message: "नाइट्रोजन कम है! उर्वरक डालें।" }, normal: { status: "मध्यम", message: "नाइट्रोजन का स्तर मध्यम है।" }, high: { status: "उच्च", message: "उच्च नाइट्रोजन! उर्वरक देना बंद करें।" } }
+            };
+            if (isNaN(numericValue) || value === 'N/A') return null;
+            if (numericValue >= 0 && numericValue <= 50) return advice[lang].low; // 0-50
+            if (numericValue >= 51 && numericValue <= 200) return advice[lang].normal; // 51-200
+            if (numericValue > 200) return advice[lang].high; // >200
+            return null;
+        };
+
+        const getMoistureAdvice = (value, lang) => {
+            const numericValue = parseFloat(value);
+            const advice = {
+                en: { dry: { status: "Too Dry", message: "Soil is too dry! Irrigation required immediately." }, normal: { status: "Normal", message: "Soil moisture is normal." }, wet: { status: "Too Wet", message: "Soil is over-watered! Reduce irrigation." } },
+                hi: { dry: { status: "बहुत सूखा", message: "मिट्टी बहुत सूखी है! तुरंत सिंचाई आवश्यक है।" }, normal: { status: "सामान्य", message: "मृदा नमी सामान्य है।" }, wet: { status: "बहुत गीला", message: "मिट्टी में ज़्यादा पानी है! सिंचाई कम करें।" } }
+            };
+            if (isNaN(numericValue) || value === 'N/A') return null;
+            if (numericValue >= 0 && numericValue <= 30) return advice[lang].dry; // 0-30%
+            if (numericValue >= 31 && numericValue <= 60) return advice[lang].normal; // 31-60%
+            if (numericValue > 60) return advice[lang].wet; // 61-100%
+            return null;
+        };
+
+
+        // --- 2. API Logic (8 Separate Calls - Stable Method) ---
+        async function fetchAllBlynkData() {
+            // Update loading status based on current language
+            dataContainer.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; color: var(--secondary-color);">${translations[currentLang].loading}</div>`;
+            
+            // Create 8 separate fetch promises
+            const fetchPromises = allSensors.map(sensor => {
+                const apiUrl = `${BLYNK_SERVER}/external/api/get?token=${AUTH_TOKEN}&${sensor.pin}`;
+                
+                return fetch(apiUrl)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`Status ${response.status} for ${sensor.pin}`);
+                        }
+                        return response.text().then(value => ({ ...sensor, value: value.trim(), error: false }));
+                    })
+                    .catch(error => {
+                        console.error(`Error fetching ${sensor.pin}:`, error);
+                        return { ...sensor, value: 'N/A', error: true };
+                    });
+            });
+
+            // Wait for all 8 calls to settle (complete)
+            const results = await Promise.allSettled(fetchPromises);
+            
+            let processedData = [];
+            let errorOccurred = false;
+
+            results.forEach(result => {
+                const sensorPin = result.value ? result.value.pin : (result.reason ? result.reason.pin : '');
+                const originalSensor = allSensors.find(s => s.pin.toLowerCase() === sensorPin.toLowerCase()) || { pin: 'unknown', name: {en: 'Unknown', hi: 'अज्ञात'}, unit: '' };
+
+                if (result.status === 'fulfilled' && !result.value.error) {
+                    processedData.push(result.value);
+                } else {
+                    processedData.push({ ...originalSensor, value: 'N/A', error: true });
+                    errorOccurred = true;
+                }
+            });
+            
+            // Store data globally and render
+            fetchedSensorData = processedData;
+            renderData(fetchedSensorData);
+            updateStatusMessage(fetchedSensorData, errorOccurred);
+        }
+
+        // --- 3. UI Logic and Rendering ---
+        
+        function renderData(data) {
+            let htmlContent = '';
+            
+            // Sort by pin number (V0, V1, V2, ...)
+            const sortedData = [...data].sort((a, b) => parseInt(a.pin.substring(1)) - parseInt(b.pin.substring(1)));
+
+            sortedData.forEach(sensor => {
+                const displayValue = sensor.value === 'N/A' ? '---' : sensor.value;
+                const valueClass = sensor.error ? 'error' : 'value';
+                const sensorName = sensor.name[currentLang];
+                let extraContent = '';
+                let advice = null;
+
+                // Determine advice based on pin
+                if (sensor.pin === 'v4' && !sensor.error) { // Potassium
+                    advice = getPotassiumAdvice(sensor.value, currentLang);
+                } else if (sensor.pin === 'v5' && !sensor.error) { // Phosphorus
+                    advice = getPhosphorusAdvice(sensor.value, currentLang);
+                } else if (sensor.pin === 'v3' && !sensor.error) { // Nitrogen
+                    advice = getNitrogenAdvice(sensor.value, currentLang);
+                } else if (sensor.pin === 'v2' && !sensor.error) { // Soil Moisture
+                    advice = getMoistureAdvice(sensor.value, currentLang);
+                }
+                
+                // If advice is found, create the advice box HTML
+                if (advice) {
+                    // Status class maps to CSS classes: low, high, normal, toodry, toowet
+                    const statusClass = advice.status.toLowerCase().replace(/[^a-z]/g, ''); 
+                    extraContent = `
+                        <div class="advice-box advice-${statusClass}">
+                            <div class="advice-status">${advice.status} (${sensor.pin.toUpperCase()})</div>
+                            <div class="advice-message">${advice.message}</div>
+                        </div>
+                    `;
+                }
+
+                htmlContent += `
+                    <div class="data-card">
+                        <strong>${sensorName}</strong>
+                        <span class="${valueClass}">${displayValue} ${sensor.unit}</span>
+                        ${extraContent}
+                    </div>
+                `;
+            });
+
+            dataContainer.innerHTML = htmlContent;
+        }
+
+        function updateStatusMessage(data, hasError) {
+            const totalSensors = allSensors.length;
+            const successfulCount = data.filter(s => !s.error).length;
+            const lang = translations[currentLang];
+
+            let message;
+            if (hasError) {
+                message = lang.error.replace('{count}', successfulCount).replace('{total}', totalSensors);
+                statusMessage.innerHTML = `<span class="error">⚠️ ${message}</span> ${lang.lastUpdated} ${new Date().toLocaleTimeString()}`;
+            } else {
+                message = lang.success.replace('{count}', totalSensors);
+                statusMessage.innerHTML = `<span class="online">✅ ${message}</span> ${lang.lastUpdated} ${new Date().toLocaleTimeString()}`;
+            }
+        }
+
+        // --- 4. Language Switch ---
+
+        function updateUIforLanguage(lang) {
+            currentLang = lang;
+            
+            // Update main header text
+            document.getElementById('header-title').textContent = translations[lang].title;
+            document.getElementById('header-subtitle').textContent = translations[lang].subtitle;
+            document.getElementById('section-title').textContent = translations[lang].section;
+
+            // Update button class
+            document.getElementById('lang-hi').classList.toggle('active', lang === 'hi');
+            document.getElementById('lang-en').classList.toggle('active', lang === 'en');
+            
+            // Re-render the cards and status message instantly with existing data
+            if (fetchedSensorData.length > 0) {
+                renderData(fetchedSensorData);
+                const hasError = fetchedSensorData.some(s => s.error);
+                updateStatusMessage(fetchedSensorData, hasError);
+            }
+        }
+
+        // --- 5. Event Listeners and Initial Load ---
+        document.getElementById('lang-hi').addEventListener('click', () => updateUIforLanguage('hi'));
+        document.getElementById('lang-en').addEventListener('click', () => updateUIforLanguage('en'));
+
+        // Load data when the page loads
+        fetchAllBlynkData();
+    </script>
+
+</body>
+</html>
