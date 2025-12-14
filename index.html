@@ -3,554 +3,635 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>🌿 Kisaan Sahayak Dashboard (Revised)</title>
+    <title>Kisaan Sahayak | Pro Dashboard</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
-        /* ==================================== */
-        /* BASE & THEME VARIABLES (Refined) */
-        /* ==================================== */
+        /* ========================================= */
+        /* 🎨 DESIGN TOKENS (Meta/Google Style)      */
+        /* ========================================= */
         :root {
-            --color-accent-green: #008744; /* Deep Green for Primary Action/Title */
-            --color-soft-green: #eaf5ee; /* Very light green for card backgrounds */
-            --color-primary: #1565c0; /* Strong Blue for secondary elements */
-            --color-background: #f5f7fa; /* Light Grayish-Blue for background */
-            --color-card-bg: #ffffff;
-            --color-text-dark: #212121;
-            --color-text-light: #fff;
-            --color-danger: #c62828; /* Strong Red */
-            --color-warning: #ffa000; /* Amber */
-            --color-success: #388e3c; /* Darker Green */
+            /* Palette */
+            --primary: #059669;       /* Emerald 600 */
+            --primary-dark: #047857;  /* Emerald 700 */
+            --bg-body: #F3F4F6;       /* Slate 100 */
+            --surface: #FFFFFF;
+            --text-main: #111827;     /* Slate 900 */
+            --text-sec: #6B7280;      /* Slate 500 */
+            
+            /* Status Colors */
+            --success-bg: #D1FAE5; --success-text: #065F46;
+            --warning-bg: #FEF3C7; --warning-text: #92400E;
+            --danger-bg: #FEE2E2; --danger-text: #991B1B;
+
+            /* Spacing & Radius */
+            --radius-lg: 16px;
+            --radius-md: 12px;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
 
-        /* ==================================== */
-        /* TYPOGRAPHY & LAYOUT */
-        /* ==================================== */
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
         body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--color-background);
-            color: var(--color-text-dark);
-            margin: 0;
-            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
+            overflow-x: hidden;
         }
 
-        .header {
-            background-color: var(--color-accent-green);
-            color: var(--color-text-light);
-            width: 100%;
-            padding: 25px 0;
-            text-align: center;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            position: relative;
-        }
-        
-        .header h1 { 
-            margin: 0; 
-            font-size: 2.2em; 
-            font-weight: 700;
-        }
-        .header p { 
-            margin: 5px 0 0; 
-            font-size: 1em;
-            opacity: 0.9; 
-        }
-
-        .container {
-            width: 95%; 
-            max-width: 1250px; 
-            margin: 30px auto;
-            padding: 0 15px;
-            flex-grow: 1;
-        }
-        
-        /* ==================================== */
-        /* LANGUAGE TOGGLE (New Position/Style) */
-        /* ==================================== */
-        .controls-row {
+        /* ========================================= */
+        /* HEADER SECTION                            */
+        /* ========================================= */
+        .app-header {
+            background-color: var(--surface);
+            padding: 16px 24px;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            box-shadow: var(--shadow-sm);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 25px;
-            padding-bottom: 10px;
-            border-bottom: 3px solid var(--color-primary);
+            backdrop-filter: blur(8px);
+            background-color: rgba(255, 255, 255, 0.9);
         }
 
-        .section-title {
-            color: var(--color-accent-green);
-            font-size: 1.8em;
-            font-weight: 600;
-            margin: 0; /* Remove default margin */
-        }
-
-        .language-toggle {
+        .brand-wrapper {
             display: flex;
-            background-color: var(--color-card-bg);
-            border-radius: 8px;
-            overflow: hidden;
-            border: 1px solid #e0e0e0;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-        }
-        
-        .language-toggle button {
-            background: none;
-            border: none;
-            color: var(--color-text-dark);
-            padding: 8px 15px;
-            cursor: pointer;
-            font-size: 0.9em;
-            font-weight: 600;
-            transition: background-color 0.2s, color 0.2s;
-        }
-        
-        /* Separator line between buttons */
-        .language-toggle button:not(:last-child) {
-            border-right: 1px solid #e0e0e0;
+            align-items: center;
+            gap: 12px;
         }
 
-        .language-toggle button.active {
-            background-color: var(--color-primary); 
-            color: var(--color-text-light);
-        }
-        
-        /* ==================================== */
-        /* DATA GRID & CARDS */
-        /* ==================================== */
-
-        .data-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
-            gap: 25px;
-            margin-bottom: 40px;
-        }
-
-        .data-card {
-            padding: 25px;
-            background-color: var(--color-soft-green); 
-            border-radius: 15px;
-            text-align: center;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
-            border-left: 5px solid var(--color-accent-green);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            min-height: 150px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .data-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
-        }
-
-        .data-card strong {
-            display: block;
-            font-size: 1.2em;
-            color: var(--color-primary);
-            margin-bottom: 10px;
-            font-weight: 600;
-        }
-
-        .data-card .value {
-            font-size: 3em;
-            font-weight: 700;
-            color: var(--color-text-dark); 
-            line-height: 1;
-        }
-        
-        .data-card .value small {
-            font-size: 0.5em;
-            font-weight: 400;
-            margin-left: 5px;
-            color: var(--color-accent-green);
-        }
-
-        .data-card .error {
-            font-size: 1.5em;
-            font-weight: 700;
-            color: var(--color-danger); 
-            margin-top: 10px;
-        }
-
-        /* Advice Box Styling */
-        .advice-box {
-            margin-top: 20px;
-            padding: 12px;
+        .brand-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            color: white;
             border-radius: 10px;
-            font-size: 0.9em;
-            font-weight: 600;
-            text-align: left;
-            border-left: 5px solid;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 10px rgba(5, 150, 105, 0.3);
         }
 
-        .advice-status {
+        .brand-text h1 {
+            font-size: 1.25rem;
             font-weight: 700;
-            font-size: 1.1em;
-            margin-bottom: 5px;
-            text-align: center;
+            letter-spacing: -0.025em;
+            color: var(--text-main);
         }
         
-        .advice-message {
-            font-weight: 400;
-            text-align: center;
+        .brand-text p {
+            font-size: 0.75rem;
+            color: var(--text-sec);
+            font-weight: 500;
         }
 
-        /* Status Coloring */
-        .advice-low, .advice-toodry {
-            background-color: #fce4e4; 
-            border-color: var(--color-danger);
-            color: var(--color-danger);
+        .actions {
+            display: flex;
+            gap: 12px;
         }
 
-        .advice-normal, .advice-medium { 
-            background-color: #e8f5e9; 
-            border-color: var(--color-success);
-            color: var(--color-success);
+        /* Buttons */
+        .btn {
+            border: none;
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Inter', sans-serif;
         }
 
-        .advice-high, .advice-toowet {
-            background-color: #fff8e1; 
-            border-color: var(--color-warning);
-            color: #795548;
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            box-shadow: 0 2px 5px rgba(5, 150, 105, 0.2);
         }
-        
-        /* ==================================== */
-        /* FOOTER & STATUS */
-        /* ==================================== */
-        .status-footer {
-            margin-top: 30px;
-            padding: 15px;
-            background-color: var(--color-card-bg);
-            border-top: 1px solid #e0e0e0;
-            text-align: center;
-            font-size: 0.95em;
-            color: #616161;
-            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+
+        .btn-primary:hover { background-color: var(--primary-dark); transform: translateY(-1px); }
+        .btn-primary:active { transform: scale(0.97); }
+
+        .btn-ghost {
+            background-color: #F3F4F6;
+            color: var(--text-sec);
+        }
+        .btn-ghost:hover { background-color: #E5E7EB; color: var(--text-main); }
+        .btn-ghost.active { background-color: var(--text-main); color: white; }
+
+        /* ========================================= */
+        /* MAIN DASHBOARD                            */
+        /* ========================================= */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 24px;
             width: 100%;
         }
 
-        .status-footer .online { color: var(--color-success); font-weight: 600; }
-        .status-footer .error { color: var(--color-danger); font-weight: 600; }
-        
-        /* Media Query for smaller screens */
-        @media (max-width: 600px) {
-            .header h1 { font-size: 1.8em; }
-            .controls-row {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            .section-title { margin-bottom: 10px; }
-            .language-toggle { margin-top: 10px; }
-            .data-card .value { font-size: 2.5em; }
-            .section-title { font-size: 1.5em; }
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
         }
+
+        .last-updated {
+            font-size: 0.85rem;
+            color: var(--text-sec);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .pulsating-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--primary);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(5, 150, 105, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(5, 150, 105, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(5, 150, 105, 0); }
+        }
+
+        /* Grid */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(0,0,0,0.03);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-4px);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            background: currentColor; /* Inherits color from inline style */
+            opacity: 0.8;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .card-label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-sec);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .card-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #F9FAFB;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            color: inherit; /* Inherits specific color */
+        }
+
+        .card-body {
+            display: flex;
+            align-items: baseline;
+            gap: 4px;
+        }
+
+        .value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-main);
+            letter-spacing: -0.03em;
+            line-height: 1;
+        }
+
+        .unit {
+            font-size: 1rem;
+            color: var(--text-sec);
+            font-weight: 500;
+        }
+
+        /* Badge/Advice */
+        .advice-badge {
+            margin-top: 16px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: fit-content;
+        }
+        
+        .status-good { background: var(--success-bg); color: var(--success-text); }
+        .status-warn { background: var(--warning-bg); color: var(--warning-text); }
+        .status-bad { background: var(--danger-bg); color: var(--danger-text); }
+
+        /* ========================================= */
+        /* MODAL (SHEET VIEW)                        */
+        /* ========================================= */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(4px);
+            z-index: 100;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.open {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: var(--surface);
+            width: 90%;
+            max-width: 1000px;
+            height: 85vh;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            display: flex;
+            flex-direction: column;
+            transform: scale(0.95);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .modal-overlay.open .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #E5E7EB;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title { font-size: 1.25rem; font-weight: 700; color: var(--text-main); }
+
+        .close-btn {
+            background: #F3F4F6;
+            border: none;
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            color: var(--text-sec);
+            font-size: 1.2rem;
+            display: flex; align-items: center; justify-content: center;
+            transition: 0.2s;
+        }
+        .close-btn:hover { background: #E5E7EB; color: #EF4444; }
+
+        .table-container {
+            flex: 1;
+            overflow: auto;
+            padding: 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+
+        th {
+            background: #F9FAFB;
+            color: var(--text-sec);
+            font-weight: 600;
+            padding: 16px 24px;
+            text-align: left;
+            position: sticky;
+            top: 0;
+            border-bottom: 1px solid #E5E7EB;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+        }
+
+        td {
+            padding: 14px 24px;
+            border-bottom: 1px solid #F3F4F6;
+            color: var(--text-main);
+        }
+
+        tr:hover td { background: #F9FAFB; }
+
+        /* Mobile Adjustments */
+        @media (max-width: 640px) {
+            .app-header { padding: 12px 16px; flex-direction: column; gap: 15px; }
+            .brand-wrapper { width: 100%; justify-content: center; }
+            .brand-text { text-align: left; }
+            .actions { width: 100%; justify-content: space-between; }
+            .btn span { display: none; } /* Hide button text on mobile */
+            .btn { padding: 10px; }
+            .btn-primary span { display: block; } /* Keep View Sheet text */
+            .grid { grid-template-columns: 1fr; }
+        }
+        
+        /* Skeleton Loading Animation */
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #f8f8f8 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: 6px;
+            color: transparent !important;
+        }
+        @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
     </style>
 </head>
 <body>
 
-    <header class="header">
-        <h1 id="header-title">🌱 Kisaan Sahayak</h1>
-        <p id="header-subtitle">Live Soil and Weather Sensor Data</p>
-    </header>
-
-    <div class="container">
-        <div class="controls-row">
-            <h2 id="section-title" class="section-title">Field Monitoring</h2>
-            <div class="language-toggle">
-                <button id="lang-hi" data-lang="hi">हिंदी</button>
-                <button id="lang-en" data-lang="en" class="active">EN</button>
+    <header class="app-header">
+        <div class="brand-wrapper">
+            <div class="brand-icon"><i class="fas fa-leaf"></i></div>
+            <div class="brand-text">
+                <h1 id="txt-title">Kisaan Sahayak</h1>
+                <p id="txt-subtitle">Pro Monitoring System</p>
             </div>
         </div>
         
-        <div id="device-data" class="data-grid">
-            <div style="grid-column: 1 / -1; text-align: center; padding: 50px; font-size: 1.2em; color: var(--color-primary);">
-                Loading live sensor data...
+        <div class="actions">
+            <button class="btn btn-primary" onclick="toggleModal(true)">
+                <i class="fas fa-table"></i> <span id="btn-view-sheet">View Data Sheet</span>
+            </button>
+
+            <button class="btn btn-ghost" id="lang-hi" onclick="setLang('hi')">हिंदी</button>
+            <button class="btn btn-ghost active" id="lang-en" onclick="setLang('en')">EN</button>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="status-bar">
+            <div class="last-updated">
+                <div class="pulsating-dot"></div>
+                <span id="txt-updated">Live Feed Active</span>
             </div>
         </div>
 
-    </div>
+        <div id="dashboard-grid" class="grid">
+            <div class="card" style="height: 180px;"><div class="card-header skeleton" style="height:20px; width:50%;"></div><div class="skeleton" style="height:60px; width:80%; margin-top:20px;"></div></div>
+            <div class="card" style="height: 180px;"><div class="card-header skeleton" style="height:20px; width:50%;"></div><div class="skeleton" style="height:60px; width:80%; margin-top:20px;"></div></div>
+            <div class="card" style="height: 180px;"><div class="card-header skeleton" style="height:20px; width:50%;"></div><div class="skeleton" style="height:60px; width:80%; margin-top:20px;"></div></div>
+            <div class="card" style="height: 180px;"><div class="card-header skeleton" style="height:20px; width:50%;"></div><div class="skeleton" style="height:60px; width:80%; margin-top:20px;"></div></div>
+        </div>
+    </main>
 
-    <div id="status-message" class="status-footer">
+    <div id="dataModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modal-title">Data History</h2>
+                <button class="close-btn" onclick="toggleModal(false)"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="table-container">
+                <table id="excel-table">
+                    <thead>
+                        <tr>
+                            <th>Temp</th> <th>Humidity</th> <th>Moisture</th>
+                            <th>Nitrogen</th> <th>Phosphorus</th> <th>Potassium</th>
+                            <th>pH</th> <th>EC</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body">
+                        </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
     <script>
-        // Use an IIFE for scope management and initialization (Professional pattern)
-        (function() {
-            // --- CONFIGURATION ---
-            const AUTH_TOKEN = 'Wce1eoW8IhucQdcgPWVTVu5qhIWlXv-w'; 
-            const BLYNK_SERVER = 'https://blynk.cloud'; 
-            const REFRESH_INTERVAL = 30000; // 30 seconds refresh for live data
+        // CONFIGURATION
+        const SHEET_ID = '109YYneaeC4Lcb2oTwtabO8jbEnMI7mzExxwMNHlB9xg';
+        const PROXY = 'https://api.allorigins.win/raw?url=';
+        const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv`;
+        
+        let currentLang = 'en';
+        let latestRows = [];
 
-            // --- STATE & CACHE ---
-            let currentLang = 'en'; 
-            let fetchedSensorData = []; 
-            
-            // --- DOM REFERENCES ---
-            const DOM = {
-                dataContainer: document.getElementById('device-data'),
-                statusMessage: document.getElementById('status-message'),
-                title: document.getElementById('header-title'),
-                subtitle: document.getElementById('header-subtitle'),
-                sectionTitle: document.getElementById('section-title'),
-                langHi: document.getElementById('lang-hi'),
-                langEn: document.getElementById('lang-en'),
-            };
-
-            // --- DATA STRUCTURES (User-facing names used) ---
-            const SENSORS = [
-                { pin: 'v0', name: { en: 'Air Temperature', hi: 'हवा का तापमान' }, unit: '°C' }, 
-                { pin: 'v1', name: { en: 'Air Humidity', hi: 'हवा की आर्द्रता' }, unit: '%' },
-                { pin: 'v2', name: 'Soil Moisture', unit: '%', isCritical: true },
-                { pin: 'v3', name: 'Nitrogen (N)', unit: 'mg', isCritical: true },
-                { pin: 'v4', name: 'Potassium (K)', unit: 'mg', isCritical: true },
-                { pin: 'v5', name: 'Phosphorous (P)', unit: 'mg', isCritical: true },
-                { pin: 'v6', name: 'Soil pH Level', unit: '' }, 
-                { pin: 'v7', name: 'Soil EC', unit: 'μA' },
-            ].map(sensor => {
-                if (typeof sensor.name === 'string') {
-                    if (sensor.name.includes('Moisture')) sensor.name = { en: 'Soil Moisture', hi: 'मृदा नमी' };
-                    else if (sensor.name.includes('Nitrogen')) sensor.name = { en: 'Nitrogen (N)', hi: 'नाइट्रोजन (N)' };
-                    else if (sensor.name.includes('Potassium')) sensor.name = { en: 'Potassium (K)', hi: 'पोटैशियम (K)' };
-                    else if (sensor.name.includes('Phosphorous')) sensor.name = { en: 'Phosphorous (P)', hi: 'फॉस्फोरस (P)' };
-                    else if (sensor.name.includes('pH')) sensor.name = { en: 'Soil pH Level', hi: 'मृदा pH स्तर' };
-                    else if (sensor.name.includes('EC')) sensor.name = { en: 'Soil EC', hi: 'मृदा EC (चालकता)' };
+        // TEXT DICTIONARY
+        const DICTIONARY = {
+            en: {
+                title: "Kisaan Sahayak", subtitle: "Pro Monitoring System",
+                btnSheet: "View Data Sheet", updated: "Last Updated:",
+                modalTitle: "Live Data History",
+                sensors: {
+                    temp: "Temperature", humidity: "Humidity", soil: "Soil Moisture",
+                    n: "Nitrogen (N)", p: "Phosphorus (P)", k: "Potassium (K)",
+                    ph: "Soil pH", ec: "Conductivity (EC)"
                 }
-                return sensor;
-            });
-            
-            const TRANSLATIONS = {
-                en: {
-                    title: '🌱 Kisaan Sahayak', subtitle: 'Live Soil and Weather Sensor Data', section: 'Field Monitoring',
-                    loading: 'Fetching data for all sensors...', success: 'All {count} data streams loaded successfully.',
-                    error: 'Loaded {count}/{total} streams. Data for some sensors may be unavailable.', lastUpdated: 'Last Updated:',
-                },
-                hi: {
-                    title: '🌱 किसान सहायक', subtitle: 'लाइव मृदा और मौसम सेंसर डेटा', section: 'खेत की निगरानी',
-                    loading: 'सभी सेंसरों के लिए डेटा प्राप्त हो रहा है...', success: 'सभी {count} डेटा स्ट्रीम सफलतापूर्वक लोड हो गए।',
-                    error: '{count}/{total} स्ट्रीम लोड हुए। कुछ सेंसरों का डेटा अनुपलब्ध हो सकता है।', lastUpdated: 'अंतिम अपडेट:',
+            },
+            hi: {
+                title: "किसान सहायक", subtitle: "प्रो मॉनिटरिंग सिस्टम",
+                btnSheet: "डेटा शीट देखें", updated: "अंतिम अपडेट:",
+                modalTitle: "लाइव डेटा इतिहास",
+                sensors: {
+                    temp: "तापमान", humidity: "आर्द्रता", soil: "मृदा नमी",
+                    n: "नाइट्रोजन (N)", p: "फॉस्फोरस (P)", k: "पोटैशियम (K)",
+                    ph: "मृदा pH", ec: "विद्युत चालकता"
                 }
-            };
-
-            // --- ADVICE LOGIC (Kept for functionality) ---
-            
-            const getPotassiumAdvice = (value, lang) => {
-                const num = parseFloat(value);
-                const advice = {
-                    en: { low: { status: "Low", message: "Low Potassium! Add MOP/Organic Potash." }, normal: { status: "Normal", message: "Potassium level is normal." }, high: { status: "High", message: "High Potassium detected! Avoid adding potash fertilizer." } },
-                    hi: { low: { status: "कम", message: "पोटैशियम कम है! MOP/जैविक पोटाश डालें।" }, normal: { status: "सामान्य", message: "पोटैशियम स्तर सामान्य है।" }, high: { status: "उच्च", message: "उच्च पोटैशियम पाया गया! पोटाश उर्वरक डालने से बचें।" } }
-                };
-                if (isNaN(num) || value === 'N/A') return null;
-                if (num >= 0 && num <= 150) return advice[lang].low;
-                if (num >= 151 && num <= 300) return advice[lang].normal;
-                if (num > 300) return advice[lang].high;
-                return null;
-            };
-            
-            const getPhosphorusAdvice = (value, lang) => {
-                const num = parseFloat(value);
-                const advice = {
-                    en: { low: { status: "Low", message: "Low Phosphorus! Add DAP/Phosphate fertilizer." }, normal: { status: "Normal", message: "Phosphorus level is normal." }, high: { status: "High", message: "High Phosphorus! Reduce fertilizer usage." } },
-                    hi: { low: { status: "कम", message: "फॉस्फोरस कम है! DAP/फॉस्फेट उर्वरक डालें।" }, normal: { status: "सामान्य", message: "फॉस्फोरस स्तर सामान्य है।" }, high: { status: "उच्च", message: "उच्च फॉस्फोरस! उर्वरक का उपयोग कम करें।" } }
-                };
-                if (isNaN(num) || value === 'N/A') return null;
-                if (num >= 0 && num <= 20) return advice[lang].low;
-                if (num >= 21 && num <= 60) return advice[lang].normal;
-                if (num > 60) return advice[lang].high; 
-                return null;
-            };
-
-            const getNitrogenAdvice = (value, lang) => {
-                const num = parseFloat(value);
-                const advice = {
-                    en: { low: { status: "Low", message: "Low Nitrogen! Add urea/ammonia sulfate fertilizer." }, normal: { status: "Medium", message: "Nitrogen levels are medium." }, high: { status: "High", message: "High Nitrogen! Reduce fertilization." } },
-                    hi: { low: { status: "कम", message: "नाइट्रोजन कम है! यूरिया/अमोनिया सल्फेट डालें।" }, normal: { status: "मध्यम", message: "नाइट्रोजन का स्तर मध्यम है।" }, high: { status: "उच्च", message: "उच्च नाइट्रोजन! उर्वरक देना बंद करें।" } }
-                };
-                if (isNaN(num) || value === 'N/A') return null;
-                if (num >= 0 && num <= 50) return advice[lang].low;
-                if (num >= 51 && num <= 200) return advice[lang].normal;
-                if (num > 200) return advice[lang].high; 
-                return null;
-            };
-
-            const getMoistureAdvice = (value, lang) => {
-                const num = parseFloat(value);
-                const advice = {
-                    en: { dry: { status: "Too Dry", message: "Soil is too dry! Irrigation required immediately." }, normal: { status: "Normal", message: "Soil moisture is normal. Maintain schedule." }, wet: { status: "Too Wet", message: "Soil is over-watered! Stop irrigation to prevent root rot." } },
-                    hi: { dry: { status: "बहुत सूखा", message: "मिट्टी बहुत सूखी है! तुरंत सिंचाई आवश्यक है।" }, normal: { status: "सामान्य", message: "मृदा नमी सामान्य है। शेड्यूल बनाए रखें।" }, wet: { status: "बहुत गीला", message: "मिट्टी में ज़्यादा पानी है! जड़ सड़न से बचने के लिए सिंचाई बंद करें।" } }
-                };
-                if (isNaN(num) || value === 'N/A') return null;
-                if (num >= 0 && num <= 30) return advice[lang].dry;
-                if (num >= 31 && num <= 60) return advice[lang].normal;
-                if (num > 60) return advice[lang].wet; 
-                return null;
-            };
-            
-            // --- API AND DATA FETCHING ---
-
-            /**
-             * Fetches data for all 8 pins using 8 parallel, individual API calls for stability.
-             */
-            async function fetchAllBlynkData() {
-                DOM.dataContainer.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 50px; font-size: 1.2em; color: var(--color-primary);">
-                    ${TRANSLATIONS[currentLang].loading}
-                </div>`;
-                
-                const fetchPromises = SENSORS.map(sensor => {
-                    const apiUrl = `${BLYNK_SERVER}/external/api/get?token=${AUTH_TOKEN}&${sensor.pin}`;
-                    
-                    return fetch(apiUrl)
-                        .then(response => {
-                            if (!response.ok) {
-                                throw new Error(`Status ${response.status} for ${sensor.pin}`);
-                            }
-                            return response.text().then(value => ({ ...sensor, value: value.trim(), error: false }));
-                        })
-                        .catch(error => {
-                            return { ...sensor, value: 'N/A', error: true };
-                        });
-                });
-
-                // Use Promise.all to wait for all promises, regardless of success/fail
-                const results = await Promise.all(fetchPromises);
-                
-                let processedData = [];
-                let errorOccurred = false;
-
-                results.forEach(sensorData => {
-                    if (sensorData.error) {
-                        errorOccurred = true;
-                    }
-                    processedData.push(sensorData);
-                });
-                
-                // Update global state and UI
-                fetchedSensorData = processedData;
-                renderData(fetchedSensorData);
-                updateStatusMessage(fetchedSensorData, errorOccurred);
             }
+        };
 
-            // --- UI RENDERING & TRANSLATION ---
-            
-            /**
-             * Generates and renders HTML cards based on sensor data.
-             */
-            function renderData(data) {
-                let htmlContent = '';
+        // SENSOR METADATA
+        const SENSORS = [
+            { id: 'temp', icon: 'fa-temperature-high', color: '#EF4444', unit: '°C' },
+            { id: 'humidity', icon: 'fa-wind', color: '#3B82F6', unit: '%' },
+            { id: 'soil', icon: 'fa-water', color: '#10B981', unit: '%' },
+            { id: 'n', icon: 'fa-leaf', color: '#8B5CF6', unit: 'mg' },
+            { id: 'p', icon: 'fa-flask', color: '#EC4899', unit: 'mg' },
+            { id: 'k', icon: 'fa-vial', color: '#F59E0B', unit: 'mg' },
+            { id: 'ph', icon: 'fa-eye-dropper', color: '#6366F1', unit: '' },
+            { id: 'ec', icon: 'fa-bolt', color: '#F97316', unit: 'µS' }
+        ];
+
+        // --- FETCH LOGIC ---
+        async function fetchData() {
+            try {
+                const response = await fetch(PROXY + encodeURIComponent(SHEET_URL));
+                if (!response.ok) throw new Error("Fetch failed");
+                const text = await response.text();
                 
-                // Sort by pin number (V0, V1, V2, ...) for consistent layout
-                const sortedData = [...data].sort((a, b) => parseInt(a.pin.substring(1)) - parseInt(b.pin.substring(1)));
+                // Parse CSV
+                const rows = text.split('\n').map(row => row.split(',').map(cell => cell.replace(/"/g, '')));
+                const validRows = rows.filter(r => r.length > 1);
+                latestRows = validRows;
 
-                sortedData.forEach(sensor => {
-                    const displayValue = sensor.value === 'N/A' ? '---' : sensor.value;
-                    const valueClass = sensor.error ? 'error' : 'value';
-                    const sensorName = sensor.name[currentLang] || sensor.name.en;
-                    let extraContent = '';
-                    let advice = null;
+                // Get Latest
+                const latest = validRows[validRows.length - 1];
+                if (!latest) return;
 
-                    // Apply advice logic for specific pins
-                    if (sensor.pin === 'v4' && !sensor.error) advice = getPotassiumAdvice(sensor.value, currentLang);
-                    else if (sensor.pin === 'v5' && !sensor.error) advice = getPhosphorusAdvice(sensor.value, currentLang);
-                    else if (sensor.pin === 'v3' && !sensor.error) advice = getNitrogenAdvice(sensor.value, currentLang);
-                    else if (sensor.pin === 'v2' && !sensor.error) advice = getMoistureAdvice(sensor.value, currentLang);
-                    
-                    // Construct advice box HTML if advice is available
-                    if (advice) {
-                        // Map status to CSS classes: advice-low, advice-normal, advice-toodry, etc.
-                        const statusClass = advice.status.toLowerCase().replace(/[^a-z]/g, ''); 
-                        extraContent = `
-                            <div class="advice-box advice-${statusClass}">
-                                <div class="advice-status">${advice.status}</div>
-                                <div class="advice-message">${advice.message}</div>
-                            </div>
-                        `;
-                    }
-                    
-                    // For the main value display: format as a whole number if it looks like one, otherwise two decimal places
-                    let formattedValue = displayValue;
-                    if (!isNaN(parseFloat(displayValue))) {
-                        formattedValue = (parseFloat(displayValue) % 1 === 0) ? displayValue : parseFloat(displayValue).toFixed(2);
-                    }
+                const dataMap = {
+                    temp: latest[0] || 0, humidity: latest[1] || 0, soil: latest[2] || 0,
+                    n: latest[3] || 0, p: latest[4] || 0, k: latest[5] || 0,
+                    ph: latest[6] || 0, ec: latest[7] || 0
+                };
 
+                updateUI(dataMap);
+                updateTable(validRows);
+                
+                // Update Timestamp
+                const now = new Date();
+                document.getElementById('txt-updated').textContent = 
+                    `${DICTIONARY[currentLang].updated} ${now.toLocaleTimeString()}`;
 
-                    htmlContent += `
-                        <div class="data-card">
-                            <div>
-                                <strong>${sensorName}</strong>
-                                <span class="${valueClass}">${formattedValue} ${sensor.error ? '' : `<small>${sensor.unit}</small>`}</span>
-                            </div>
-                            ${extraContent}
+            } catch (err) {
+                console.error(err);
+                document.getElementById('txt-updated').innerHTML = "<span style='color:red'>Connection Issue</span>";
+            }
+        }
+
+        // --- RENDER CARDS ---
+        function updateUI(data) {
+            const grid = document.getElementById('dashboard-grid');
+            grid.innerHTML = '';
+
+            SENSORS.forEach(sensor => {
+                const val = parseFloat(data[sensor.id]);
+                const displayVal = isNaN(val) ? '--' : val.toFixed(1);
+                const label = DICTIONARY[currentLang].sensors[sensor.id];
+                const advice = getAdvice(sensor.id, val);
+
+                let badgeHTML = '';
+                if (advice) {
+                    badgeHTML = `
+                        <div class="advice-badge ${advice.cls}">
+                            <i class="fas ${advice.icon}"></i> ${advice.msg}
+                        </div>`;
+                }
+
+                grid.innerHTML += `
+                    <div class="card" style="color: ${sensor.color}">
+                        <div class="card-header">
+                            <span class="card-label">${label}</span>
+                            <div class="card-icon"><i class="fas ${sensor.icon}"></i></div>
                         </div>
-                    `;
-                });
+                        <div class="card-body">
+                            <span class="value">${displayVal}</span>
+                            <span class="unit">${sensor.unit}</span>
+                        </div>
+                        ${badgeHTML}
+                    </div>
+                `;
+            });
+        }
 
-                DOM.dataContainer.innerHTML = htmlContent;
-            }
-
-            /**
-             * Updates the status message based on fetch results.
-             */
-            function updateStatusMessage(data, hasError) {
-                const totalSensors = SENSORS.length;
-                const successfulCount = data.filter(s => !s.error).length;
-                const lang = TRANSLATIONS[currentLang];
-
-                let message;
-                if (hasError) {
-                    message = lang.error.replace('{count}', successfulCount).replace('{total}', totalSensors);
-                    // Use correct locale for time format
-                    DOM.statusMessage.innerHTML = `<span class="error">⚠️ ${message}</span> | ${lang.lastUpdated} ${new Date().toLocaleTimeString(currentLang === 'hi' ? 'hi-IN' : 'en-US')}`;
-                } else {
-                    message = lang.success.replace('{count}', totalSensors);
-                    DOM.statusMessage.innerHTML = `<span class="online">✅ ${message}</span> | ${lang.lastUpdated} ${new Date().toLocaleTimeString(currentLang === 'hi' ? 'hi-IN' : 'en-US')}`;
-                }
-            }
-
-            /**
-             * Handles language switch without re-fetching API data.
-             */
-            function switchLanguage(lang) {
-                if (currentLang === lang) return;
-                currentLang = lang;
-                
-                // Update static text elements
-                DOM.title.textContent = TRANSLATIONS[lang].title;
-                DOM.subtitle.textContent = TRANSLATIONS[lang].subtitle;
-                DOM.sectionTitle.textContent = TRANSLATIONS[lang].section;
-
-                // Update button styles
-                DOM.langHi.classList.toggle('active', lang === 'hi');
-                DOM.langEn.classList.toggle('active', lang === 'en');
-                
-                // Re-render dynamic content (cards and status)
-                if (fetchedSensorData.length > 0) {
-                    renderData(fetchedSensorData);
-                    const hasError = fetchedSensorData.some(s => s.error);
-                    updateStatusMessage(fetchedSensorData, hasError);
-                } else {
-                    // If initial data is still loading, show the loading message in the new language
-                    DOM.dataContainer.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 50px; font-size: 1.2em; color: var(--color-primary);">
-                        ${TRANSLATIONS[currentLang].loading}
-                    </div>`;
-                }
-            }
-
-            // --- INITIALIZATION AND EVENT LISTENERS ---
+        // --- RENDER TABLE ---
+        function updateTable(rows) {
+            const tbody = document.getElementById('table-body');
+            let html = '';
             
-            DOM.langHi.addEventListener('click', () => switchLanguage('hi'));
-            DOM.langEn.addEventListener('click', () => switchLanguage('en'));
+            // Show last 50 entries, reversed (newest first)
+            for (let i = rows.length - 1; i >= Math.max(0, rows.length - 50); i--) {
+                const r = rows[i];
+                if (r.length < 8) continue; // Skip broken rows
+                
+                html += `<tr>
+                    <td>${r[0]}</td> <td>${r[1]}</td> <td>${r[2]}</td>
+                    <td>${r[3]}</td> <td>${r[4]}</td> <td>${r[5]}</td>
+                    <td>${r[6]}</td> <td>${r[7]}</td>
+                </tr>`;
+            }
+            tbody.innerHTML = html;
+        }
 
-            // Initial data load on page ready
-            fetchAllBlynkData();
+        // --- ADVICE LOGIC ---
+        function getAdvice(type, val) {
+            if (isNaN(val)) return null;
             
-            // Set up automatic refresh
-            setInterval(fetchAllBlynkData, REFRESH_INTERVAL); 
+            // Example Logic
+            if (type === 'soil') {
+                if (val < 30) return { cls: 'status-bad', icon: 'fa-tint-slash', msg: currentLang === 'en' ? 'Dry Soil' : 'सूखी मिट्टी' };
+                if (val > 80) return { cls: 'status-warn', icon: 'fa-water', msg: currentLang === 'en' ? 'Too Wet' : 'बहुत गीला' };
+                return { cls: 'status-good', icon: 'fa-check', msg: currentLang === 'en' ? 'Optimal' : 'सामान्य' };
+            }
+            if (type === 'n') {
+                if (val < 50) return { cls: 'status-bad', icon: 'fa-arrow-down', msg: 'Low N' };
+                if (val > 200) return { cls: 'status-warn', icon: 'fa-arrow-up', msg: 'High N' };
+                return { cls: 'status-good', icon: 'fa-check', msg: 'Good' };
+            }
+            return null;
+        }
 
-        })();
+        // --- HELPERS ---
+        function toggleModal(show) {
+            const modal = document.getElementById('dataModal');
+            if (show) {
+                modal.classList.add('open');
+                document.body.style.overflow = 'hidden'; // Stop scrolling bg
+            } else {
+                modal.classList.remove('open');
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        function setLang(lang) {
+            currentLang = lang;
+            document.getElementById('lang-en').classList.toggle('active', lang === 'en');
+            document.getElementById('lang-hi').classList.toggle('active', lang === 'hi');
+            
+            // Update Text
+            const t = DICTIONARY[lang];
+            document.getElementById('txt-title').textContent = t.title;
+            document.getElementById('txt-subtitle').textContent = t.subtitle;
+            document.getElementById('btn-view-sheet').textContent = t.btnSheet;
+            document.getElementById('modal-title').textContent = t.modalTitle;
+            
+            fetchData(); // Refresh UI texts
+        }
+
+        // --- INIT ---
+        window.addEventListener('load', () => {
+            fetchData();
+            setInterval(fetchData, 10000); // 10s auto-refresh
+        });
+
     </script>
-
 </body>
 </html>
